@@ -29,11 +29,11 @@
 </head>
 <body>
 
-<!-- 停止ボタン -->
-<button id="stopButton" class="button">停止</button>
-
 <!-- ボタンと音楽プレーヤー -->
 <div id="musicPlayer"></div>
+
+<!-- 停止ボタン -->
+<button id="stopButton" class="button">停止</button>
 
 <script>
 // ボタンと音楽を管理する配列
@@ -63,26 +63,19 @@ function createButton(index) {
     stopButton.textContent = '停止';
     musicButtons[index].audio = audio; // 音楽ファイルの再生を管理するためのオブジェクトを追加
   });
-  // ボタンを音楽プレーヤーに追加する必要はありません
+  document.getElementById('musicPlayer').appendChild(button);
 }
 
 // ボタンと画像を設定する関数
 function setButton(index, src, imageSrc) {
   musicButtons[index] = { src: src, imageSrc: imageSrc };
-  var button = document.createElement('button');
-  button.classList.add('button');
+  var button = document.getElementsByClassName('button')[index];
+  button.textContent = ''; // ボタンのテキストをクリア
   var image = document.createElement('img');
   image.src = imageSrc;
   image.alt = 'Button ' + (index + 1);
   image.classList.add('music-image');
   button.appendChild(image);
-  button.addEventListener('click', function() {
-    var audio = new Audio(src);
-    audio.play();
-    currentAudio = audio;
-    stopButton.textContent = '停止';
-  });
-  document.getElementById('musicPlayer').appendChild(button); // ボタンを音楽プレーヤーに追加
 }
 
 // ボタンを10個作成
@@ -91,4 +84,19 @@ for (var i = 0; i < 10; i++) {
 }
 
 // ボタンに画像を設定
-setButton(0, 'mp3.mp3', 'https://github.com/test10311111/nekomeme-3/blob/main/40497.jpg');
+setButton(0, '/Users/tsubakinokanji/Downloads/mp3.mp3', '/Users/tsubakinokanji/Downloads/40497.jpg');
+setButton(1, '/Users/tsubakinokanji/Downloads/y2mate.com - Cat Dancing to EDM  Green Screen.mp3', '/Users/tsubakinokanji/Downloads/40510.jpg');
+setButton(2, '/Users/tsubakinokanji/Downloads/y2mate.com - Cat Dances To Girlfriend GREEN SCREEN.mp3', '/Users/tsubakinokanji/Downloads/40511.jpg');
+setButton(3, '/Users/tsubakinokanji/Downloads/y2mate.com - 猫ミームチピチピチャパチャパグリーンバック素材.mp3', '/Users/tsubakinokanji/Downloads/40512.jpg');
+setButton(4, '/Users/tsubakinokanji/Downloads/y2mate.com - Huh Cat Meme Green Screen.mp3', '/Users/tsubakinokanji/Downloads/40529.jpg');
+setButton(5, '/Users/tsubakinokanji/Downloads/y2mate.com - Green Screen Talking Cat Meme.mp3', '/Users/tsubakinokanji/Downloads/40530.jpg');
+setButton(6, '/Users/tsubakinokanji/Downloads/y2mate.com - 猫ミームもがく猫グリーンバック素材.mp3', '/Users/tsubakinokanji/Downloads/40531.jpg');
+setButton(7, '/Users/tsubakinokanji/Downloads/y2mate.com - DJ Cat Meme Green Screen Chroma Key Template.mp3', '/Users/tsubakinokanji/Downloads/40532.jpg');
+setButton(8, '/Users/tsubakinokanji/Downloads/y2mate.com - Happy米津玄師GB.mp3', '/Users/tsubakinokanji/Downloads/40700.jpg');
+setButton(9, '/Users/tsubakinokanji/Downloads/y2mate.com - 猫ミーム五条悟素材.mp3', '/Users/tsubakinokanji/Downloads/40701.jpg');
+setButton(10, '/Users/tsubakinokanji/Downloads/y2mate.com - うるさいヤギ   GB素材素材 meme memes.mp3', '/Users/tsubakinokanji/Downloads/40702.jpg');
+// 他のボタンも同様に設定
+</script>
+
+</body>
+</html>
