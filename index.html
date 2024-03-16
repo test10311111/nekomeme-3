@@ -1,103 +1,114 @@
+興味が湧いたので最低限動くところまで直してみました
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Music Player</title>
-<style>
-  .button {
-    display: inline-block;
-    margin: 10px;
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    border: none;
-    border-radius: 5px;
-  }
-  .music-image {
-    width: 50px;
-    height: 50px;
-    object-fit: cover;
-    border-radius: 50%;
-  }
-  #stopButton {
-    position: fixed;
-    bottom: 10px;
-    left: 10px;
-  }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Music Player</title>
+  <style>
+    .button {
+      display: inline-block;
+      margin: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+    }
+
+    .music-image {
+      width: 50px;
+      height: 50px;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+    #stopButton {
+      position: fixed;
+      bottom: 10px;
+      left: 10px;
+    }
+  </style>
 </head>
+
 <body>
 
-<!-- 停止ボタン -->
-<button id="stopButton" class="button">停止</button>
+  <!-- 停止ボタン -->
+  <button id="stopButton" class="button">停止</button>
 
-<!-- ボタンと音楽プレーヤー -->
-<div id="musicPlayer"></div>
+  <!-- ボタンと音楽プレーヤー -->
+  <div id="musicPlayer"></div>
 
-<script>
-// ボタンと音楽を管理する配列
-var musicButtons = [];
+  <script>
+    // ボタンと音楽を管理する配列
+    var musicButtons = [];
 
-// 停止ボタンを取得
-var stopButton = document.getElementById('stopButton');
+    // 停止ボタンを取得
+    var stopButton = document.getElementById('stopButton');
 
-// 停止ボタンがクリックされたときの処理を追加
-stopButton.addEventListener('click', function() {
-    // 再生中の音楽を停止する
-    if (currentAudio && !currentAudio.paused) {
+    // 停止ボタンがクリックされたときの処理を追加
+    stopButton.addEventListener('click', function () {
+      // 再生中の音楽を停止する
+      if (currentAudio && !currentAudio.paused) {
         currentAudio.pause();
         currentAudio.currentTime = 0;
+      }
+    });
+
+    // ボタンを作成する関数
+    function createButton(index) {
+      var button = document.createElement('button');
+      button.classList.add('button');
+      button.textContent = 'Button ' + (index + 1);
+      button.addEventListener('click', function () {
+        var audio = new Audio(musicButtons[index].src);
+        audio.play();
+        currentAudio = audio;
+        stopButton.textContent = '停止';
+        musicButtons[index].audio = audio; // 音楽ファイルの再生を管理するためのオブジェクトを追加
+      });
+      // ボタンを音楽プレーヤーに追加する必要はありません
     }
-});
 
-// ボタンを作成する関数
-function createButton(index) {
-  var button = document.createElement('button');
-  button.classList.add('button');
-  button.textContent = 'Button ' + (index + 1);
-  button.addEventListener('click', function() {
-    var audio = new Audio(musicButtons[index].src);
-    audio.play();
-    currentAudio = audio;
-    stopButton.textContent = '停止';
-    musicButtons[index].audio = audio; // 音楽ファイルの再生を管理するためのオブジェクトを追加
-  });
-  // ボタンを音楽プレーヤーに追加する必要はありません
-}
+    // ボタンと画像を設定する関数
+    function setButton(index, imageSrc, src) {
+      console.log(imageSrc)
+      musicButtons[index] = { src: src, imageSrc: imageSrc };
+      var button = document.createElement('button');
+      button.classList.add('button');
+      var image = document.createElement('img');
+      image.src = imageSrc;
+      image.alt = 'Button ' + (index + 1);
+      image.classList.add('music-image');
+      button.appendChild(image);
+      button.addEventListener('click', function () {
+        var audio = new Audio(src);
+        audio.play();
+        currentAudio = audio;
+        stopButton.textContent = '停止';
+      });
+      document.getElementById('musicPlayer').appendChild(button); // ボタンを音楽プレーヤーに追加
+    }
 
-// ボタンと画像を設定する関数
-function setButton(index, src, imageSrc) {
-  musicButtons[index] = { src: src, imageSrc: imageSrc };
-  var button = document.createElement('button');
-  button.classList.add('button');
-  var image = document.createElement('img');
-  image.src = imageSrc;
-  image.alt = 'Button ' + (index + 1);
-  image.classList.add('music-image');
-  button.appendChild(image);
-  button.addEventListener('click', function() {
-    var audio = new Audio(src);
-    audio.play();
-    currentAudio = audio;
-    stopButton.textContent = '停止';
-  });
-  document.getElementById('musicPlayer').appendChild(button); // ボタンを音楽プレーヤーに追加
-}
+    // ボタンを９個作成
+    for (var i = 0; i < 9; i++) {
+      createButton(i);
+    }
 
-// ボタンを９個作成
-for (var i = 0; i < ９; i++) {
-  createButton(i);
-}
+    // ボタンに画像を設定
+    setButton(0, 'img/40497.jpg', 'Audio/mp3.mp3');
+    setButton(1, 'img/40510.jpg', 'Audio/y2mate.com%20-%20Cat%20Dancing%20to%20EDM%20%20Green%20Screen.mp3');
+    setButton(2, 'img/40511.jpg', 'Audio/SnapSave.io%20-%20Cat%20Dances%20To%20Girlfriend%20GREEN%20SCREEN%20(128%20kbps).mp3');
+    setButton(3, 'img/40512.jpg', 'Audio/y2mate.com%20-%20%E7%8C%AB%E3%83%9F%E3%83%BC%E3%83%A0%E3%83%81%E3%83%92%E3%82%9A%E3%83%81%E3%83%92%E3%82%9A%E3%83%81%E3%83%A3%E3%83%8F%E3%82%9A%E3%83%81%E3%83%A3%E3%83%8F%E3%82%9A%E3%82%AF%E3%82%99%E3%83%AA%E3%83%BC%E3%83%B3%E3%83%8F%E3%82%99%E3%83%83%E3%82%AF%E7%B4%A0%E6%9D%90.mp3');
+    setButton(4, 'img/40529.jpg', 'Audio/y2mate.com%20-%20Huh%20Cat%20Meme%20Green%20Screen.mp3');
+    setButton(5, 'img/40530.jpg', 'Audio/y2mate.com%20-%20Green%20Screen%20Talking%20Cat%20Meme.mp3');
+    setButton(6, 'img/40531.jpg', 'Audio/y2mate.com%20-%20%E7%8C%AB%E3%83%9F%E3%83%BC%E3%83%A0%E3%82%82%E3%81%8B%E3%82%99%E3%81%8F%E7%8C%AB%E3%82%AF%E3%82%99%E3%83%AA%E3%83%BC%E3%83%B3%E3%83%8F%E3%82%99%E3%83%83%E3%82%AF%E7%B4%A0%E6%9D%90.mp3');
+    setButton(7, 'img/40532.jpg', 'Audio/y2mate.com%20-%20DJ%20Cat%20Meme%20Green%20Screen%20Chroma%20Key%20Template.mp3');
+    setButton(8, 'img/40700.jpg', 'Audio/y2mate.com%20-%20Happy%E7%B1%B3%E6%B4%A5%E7%8E%84%E5%B8%ABGB.mp3');
+    setButton(9, 'img/40701.jpg', 'Audio/y2mate.com%20-%20%E7%8C%AB%E3%83%9F%E3%83%BC%E3%83%A0%E4%BA%94%E6%9D%A1%E6%82%9F%E7%B4%A0%E6%9D%90.mp3');
+  </script>
+</body>
 
-// ボタンに画像を設定
-setButton(0, 'https://github.com/test10311111/nekomeme-3/blob/main/img/40497.jpg', 'https://github.com/test10311111/nekomeme-3/blob/main/Audio/mp3.mp3');
-setButton(1, 'https://github.com/test10311111/nekomeme-3/blob/main/img/40510.jpg', 'https://github.com/test10311111/nekomeme-3/blob/main/Audio/y2mate.com%20-%20Cat%20Dancing%20to%20EDM%20%20Green%20Screen.mp3');
-setButton(2, 'https://github.com/test10311111/nekomeme-3/blob/main/img/40511.jpg', 'https://github.com/test10311111/nekomeme-3/blob/main/Audio/SnapSave.io%20-%20Cat%20Dances%20To%20Girlfriend%20GREEN%20SCREEN%20(128%20kbps).mp3');
-setButton(3, 'https://github.com/test10311111/nekomeme-3/blob/main/img/40512.jpg', 'https://github.com/test10311111/nekomeme-3/blob/main/Audio/y2mate.com%20-%20%E7%8C%AB%E3%83%9F%E3%83%BC%E3%83%A0%E3%83%81%E3%83%92%E3%82%9A%E3%83%81%E3%83%92%E3%82%9A%E3%83%81%E3%83%A3%E3%83%8F%E3%82%9A%E3%83%81%E3%83%A3%E3%83%8F%E3%82%9A%E3%82%AF%E3%82%99%E3%83%AA%E3%83%BC%E3%83%B3%E3%83%8F%E3%82%99%E3%83%83%E3%82%AF%E7%B4%A0%E6%9D%90.mp3');
-setButton(4, 'https://github.com/test10311111/nekomeme-3/blob/main/img/40529.jpg', 'https://github.com/test10311111/nekomeme-3/blob/main/Audio/y2mate.com%20-%20Huh%20Cat%20Meme%20Green%20Screen.mp3');
-setButton(5, 'https://github.com/test10311111/nekomeme-3/blob/main/img/40530.jpg', 'https://github.com/test10311111/nekomeme-3/blob/main/Audio/y2mate.com%20-%20Green%20Screen%20Talking%20Cat%20Meme.mp3');
-setButton(6, 'https://github.com/test10311111/nekomeme-3/blob/main/img/40531.jpg', 'https://github.com/test10311111/nekomeme-3/blob/main/Audio/y2mate.com%20-%20%E7%8C%AB%E3%83%9F%E3%83%BC%E3%83%A0%E3%82%82%E3%81%8B%E3%82%99%E3%81%8F%E7%8C%AB%E3%82%AF%E3%82%99%E3%83%AA%E3%83%BC%E3%83%B3%E3%83%8F%E3%82%99%E3%83%83%E3%82%AF%E7%B4%A0%E6%9D%90.mp3');
-setButton(7, 'https://github.com/test10311111/nekomeme-3/blob/main/img/40532.jpg', 'https://github.com/test10311111/nekomeme-3/blob/main/Audio/y2mate.com%20-%20DJ%20Cat%20Meme%20Green%20Screen%20Chroma%20Key%20Template.mp3');
-setButton(8, 'https://github.com/test10311111/nekomeme-3/blob/main/img/40700.jpg', 'https://github.com/test10311111/nekomeme-3/blob/main/Audio/y2mate.com%20-%20Happy%E7%B1%B3%E6%B4%A5%E7%8E%84%E5%B8%ABGB.mp3');
-setButton(9, 'https://github.com/test10311111/nekomeme-3/blob/main/img/40701.jpg', 'https://github.com/test10311111/nekomeme-3/blob/main/Audio/y2mate.com%20-%20%E7%8C%AB%E3%83%9F%E3%83%BC%E3%83%A0%E4%BA%94%E6%9D%A1%E6%82%9F%E7%B4%A0%E6%9D%90.mp3');
+</html>
